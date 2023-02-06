@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components';
 import { themes } from '../../themes/themes';
 
 export const RecorderContainer = styled.div`
+  z-index: 100;
   background: transparent;
   position: absolute;
   left: 0;
@@ -11,7 +12,7 @@ export const RecorderContainer = styled.div`
   padding: 20px;
   transition: opacity 0.3s ease-in-out;
   opacity: ${(props) =>
-    props.opacity && props.isRecording === true && props.opacity};
+    props.opacity && props.isRecording === "recording" ? props.opacity : 1};
   &:hover{
     opacity: 1}
   }
@@ -86,10 +87,6 @@ export const Container = styled.div`
 
   transition: width 0.2s ease-in-out;
 
-  & .noteIcon {
-    color: ${themes.light.colors.background};
-  }
-
   & .opacityContainer {
     position: absolute;
     height: 50px;
@@ -138,6 +135,86 @@ export const Container = styled.div`
       }
     }
   }
+
+  transition: width 0.5s ease-in-out;
+
+  & .colorContainer {
+    position: absolute;
+    height: 0;
+    width: 0;
+    background-color: ${themes.dark.colors.background};
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    left: -5px;
+    padding: 8px;
+    z-index: -1;
+    border-radius: 30px;
+    margin-left: 10px;
+
+    transition: width 0.5s ease-in-out;
+
+    opacity: 0.6;
+    -webkit-transition: 0.2s;
+    transition: opacity 0.3s, width 0.5s ease-in;
+    padding-left: 0;
+    gap: 10px;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  &:hover .colorContainer {
+    width: auto;
+    transition: width 0.5s ease-in-out;
+    padding-left: 60px;
+    height: 42px;
+  }
+`;
+
+export const DrawColorSelector = styled.div`
+  /* position: absolute;
+  height: 54px;
+  width: auto;
+  background-color: ${themes.dark.colors.background};
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  left: -5px;
+  opacity: 1;
+  padding: 2px;
+  z-index: -1;
+  border-radius: 30px;
+  margin-left: 10px;
+
+  transition: width 0.5s ease-in-out;
+
+  &:hover .colorContainer.show {
+    width: 150px;
+    padding-inline: 10px;
+    padding-right: 20px;
+    left: 0;
+
+    .colorContainer {
+      display: flex;
+      width: 100%;
+      max-width: 500px;
+      height: 100%;
+      margin: auto;
+      margin-left: 50px;
+      opacity: 0.7;
+      -webkit-transition: 0.2s;
+      transition: opacity 0.2s;
+       padding-left: 44px 
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  } */
 `;
 
 export const Stop = styled.div`

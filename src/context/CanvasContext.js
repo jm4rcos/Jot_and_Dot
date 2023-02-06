@@ -6,6 +6,7 @@ export const CanvasProvider = ({ children }) => {
   const [isDrawing, setIsDrawing] = useState(false)
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
+  const [color, setColor] = useState("#000");
 
   const prepareCanvas = () => {
     const canvas = canvasRef.current
@@ -17,7 +18,7 @@ export const CanvasProvider = ({ children }) => {
     const context = canvas.getContext("2d")
     context.scale(2, 2);
     context.lineCap = "round";
-    context.strokeStyle = "black";
+    context.strokeStyle = color;
     context.lineWidth = 5;
     contextRef.current = context;
   };
@@ -46,7 +47,7 @@ export const CanvasProvider = ({ children }) => {
   const clearCanvas = () => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d")
-    context.fillStyle = "white"
+    context.fillStyle = "transparent"
     context.fillRect(0, 0, canvas.width, canvas.height)
   }
 
@@ -60,6 +61,7 @@ export const CanvasProvider = ({ children }) => {
         finishDrawing,
         clearCanvas,
         draw,
+        setColor, color
       }}
     >
       {children}

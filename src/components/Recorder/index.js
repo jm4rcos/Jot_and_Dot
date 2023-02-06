@@ -17,18 +17,19 @@ import { Button } from '../Button';
 import { useState } from 'react';
 import { FaPlay } from "react-icons/fa";
 import {
-  AiFillDelete,
   AiOutlineAudioMuted,
   AiOutlineAudio,
 } from "react-icons/ai";
 import { themes } from '../../themes/themes';
 import {
   MdOutlineStickyNote2,
-  MdOutlineVideoSettings,
   MdOutlineBrightness6,
 } from "react-icons/md";
-import { Video } from '../Video';
 import { TbPencil } from 'react-icons/tb';
+import { Canvas } from '../Canvas';
+import { useCanvas } from '../../context/CanvasContext';
+
+const colors = ["#dc143c", "#1aa7ec", "#1BC47D", "#797ef6", "#FDB913", "#000", "#FFF"];
 
 export const RecorderWrapper = () => {
   const [hasAudio, setHasAudio] = useState(true);
@@ -39,6 +40,9 @@ export const RecorderWrapper = () => {
   const [sliderValue, setSliderValue] = useState(50);
   const [isHoreving, setIsHoreving] = useState(false);
   const [isOpacityClicked, setIsOpacityClicked] = useState(false);
+  const [isDrawing, setIsDrawing] = useState(false);
+
+  const { setColor } = useCanvas();
 
   const opacity = sliderValue / 100;
 
@@ -57,31 +61,60 @@ export const RecorderWrapper = () => {
 
   return (
     <View>
+      {isDrawing && (
+        <Canvas
+          bgColor="transparent"
+          style={{
+            height: "100vh",
+            width: "100%",
+            position: "absolute",
+          }}
+        />
+      )}
       <Draggable bounds="parent">
         <RecorderContainer
           opacity={opacity}
-          isRecording={isRecording}
+          isRecording={status}
           isHoreving={isHoreving}
         >
           {status === "recording" && (
-            <>
-              <Container>
-                <Button className="drawBtn" color="transparent">
-                  <TbPencil size={30} className="noteIcon" />
-                </Button>
-              </Container>
-              <Container>
-                <Button className="noteBtn" color="transparent">
-                  <MdOutlineStickyNote2 size={30} className="noteIcon" />
-                </Button>
-              </Container>
-            </>
+          <>
+            <Container>
+              <Button
+                className="drawBtn"
+                color={isDrawing ? null : "transparent"}
+                onClick={() => setIsDrawing(!isDrawing)}
+              >
+                <TbPencil size={30} color="#000" />
+              </Button>
+              {isDrawing && (
+                <div className="colorContainer">
+                  {colors.map((color) => {
+                    return (
+                      <Button
+                        key={color}
+                        color={color}
+                        onClick={() => setColor(color)}
+                      />
+                    );
+                  })}
+                </div>
+              )}
+            </Container>
+            {/* <Container>
+              <Button className="noteBtn" color="transparent">
+                <MdOutlineStickyNote2 size={30} className="noteIcon" />
+              </Button>
+            </Container> */}
+          </>
           )}
+          
 
           <Container>
             {status === "recording" ? (
               <Button
                 onClick={() => {
+                  setIsDrawing(false);
                   stopRecording();
                   setIsRecording(!isRecording);
                   setRecordingTime(0);
@@ -114,9 +147,6 @@ export const RecorderWrapper = () => {
               </TimeTracking>
             )}
             <Line />
-            <Button className="deleteBtn" color="transparent">
-              <AiFillDelete size={30} className="deleteIcon" />
-            </Button>
 
             {status !== "recording" && (
               <Button
@@ -131,7 +161,8 @@ export const RecorderWrapper = () => {
               </Button>
             )}
             <Button
-              color="transparent"
+              className="opacityButton"
+              color={isOpacityClicked ? null : "transparent"}
               onClick={() => setIsOpacityClicked(!isOpacityClicked)}
               style={{ zIndex: 1 }}
             >
@@ -159,7 +190,7 @@ export const RecorderWrapper = () => {
       {/* <Video mediaBlobUrl={mediaBlobUrl} controls/> */}
       <VideoContainer>
         {mediaBlobUrl && status !== "recording" && (
-          <video src={mediaBlobUrl} controls autoplay />
+          <video src={mediaBlobUrl} controls />
         )}
       </VideoContainer>
     </View>
