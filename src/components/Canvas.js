@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useCanvas } from "./CanvasContext";
+import { useCanvas } from "../context/CanvasContext";
 
 export function Canvas() {
   const {
@@ -16,6 +16,8 @@ export function Canvas() {
 
   return (
     <canvas
+      className="canvas"
+      style={{ backgroundColor: "#456" }}
       onMouseDown={startDrawing}
       onMouseUp={finishDrawing}
       onMouseMove={draw}

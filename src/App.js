@@ -1,13 +1,17 @@
 import React from 'react'
-import { Canvas } from './Canvas'
-import { ClearCanvasButton } from './ClearCanvasButton';
+import { Canvas } from './components/Canvas'
+import { RecorderWrapper } from './components/Recorder';
+// import { ClearCanvasButton } from './ClearCanvasButton';
 
 function App() {
   return (
     <>
-      <Canvas/>
-      <ClearCanvasButton/>
+      <RecorderWrapper >
+
+      {/* <Canvas/> */}
+      </RecorderWrapper>
     </>
+
   );
 }
 
